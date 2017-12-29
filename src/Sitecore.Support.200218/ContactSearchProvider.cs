@@ -12,9 +12,9 @@ using Sitecore.ContentSearch.Linq.Utilities;
 using System.Linq.Expressions;
 using Sitecore.Cintel.Reporting.Utility;
 
-namespace Sitecore.Cintel
+namespace Sitecore.Support.Cintel
 {
-  public class ContactSearchProvider : IContactSearchProvider
+  public class ContactSearchProvider : Sitecore.Cintel.IContactSearchProvider
   {
     public byte[] Bookmark { get; set; }
 
@@ -53,13 +53,17 @@ namespace Sitecore.Cintel
           var personalInfo = sr.GetFacet<PersonalInformation>(PersonalInformation.DefaultFacetKey);
           var emailInfo = sr.GetFacet<EmailAddressList>(EmailAddressList.DefaultFacetKey);
 
-          var interaction = sr.Interactions.FirstOrDefault();
+          #region Fixed code
+          var interaction = sr.Interactions.LastOrDefault();
+          #endregion
 
           IEnumerable<Interaction> filteredInteractions = sr.Interactions;
           if (filteredInteractions.Count() >= 0)
           {
             filteredInteractions = ApplyDeviceFilter(filteredInteractions, deviceFilters);
-            interaction = filteredInteractions.FirstOrDefault();
+            #region Fixed code
+            interaction = filteredInteractions.LastOrDefault();
+            #endregion
           }
           else
             interaction = null;
